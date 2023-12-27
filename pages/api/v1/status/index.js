@@ -12,12 +12,20 @@ async function status(request, response) {
   const databaseMaxConnectionsValue =
     databaseMaxConnectionsResult.rows[0].max_connections;
 
+  const databaseOpenedConnectionsResult = await database.query(
+    "SELECT count(*)::int FROM pg_stat_activity WHERE datname = 'postgres';"
+  );
+
+  const databaseOpenedConnectionsValue =
+    databaseOpenedConnectionsResult.rows[0].count;
+
   response.status(200).json({
     updated_at: updatedAt,
     dependencies: {
       database: {
         version: databaseVersionValue,
         max_connections: parseInt(databaseMaxConnectionsValue),
+        opened_connections: parseInt(databaseOpenedConnectionsValue),
       },
     },
   });
