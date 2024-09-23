@@ -2,6 +2,7 @@ import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await orchestrator.clearDatabase();
 });
 
 test("GET to /api/v1/status should return 200", async () => {
